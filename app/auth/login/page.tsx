@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import {X, Mail, Lock, ArrowRight, Briefcase, Github } from 'lucide-react';
+import {X, Mail, Lock, ArrowRight, Briefcase } from 'lucide-react';
 import {FaGithub,FaChrome} from "react-icons/fa"
 
 const LoginPage = () => {
