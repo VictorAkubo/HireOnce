@@ -1,10 +1,10 @@
 import mongoose from "mongoose"
 const MongoUri = process.env.MONGODB_URI
-const DbConnect =()=>{
+ const DbConnect = async ()=>{
   if(!MongoUri){
     return "no uri found"
   }
- mongoose.connect(MongoUri)
+ await mongoose.connect(MongoUri)
  return mongoose
 }
 

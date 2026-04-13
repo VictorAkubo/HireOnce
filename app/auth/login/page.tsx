@@ -1,11 +1,39 @@
 "use client";
 
-import React from 'react';
+import React,{useReducer} from 'react';
 import Link from 'next/link';
 import {X, Mail, Lock, ArrowRight, Briefcase } from 'lucide-react';
 import {FaGithub,FaChrome} from "react-icons/fa"
-
+const reducer =(state,action)=>{
+  switch(action.type){
+    case "INPUT_CHANGE":
+      return {
+        ...state,
+        [action.field]:action.payload
+      }
+    default:
+     return state
+  }
+}
 const LoginPage = () => {
+  const [state,dispatch] = useReducer(reducer,{
+    email:"",
+    password:""
+  })
+  const Login = async (e)=>{
+    e.preventDefault();
+    const response = await fetch("http://localhost:3000/api/login",{
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json"
+      },
+      body:JSON.stringify(state)
+    })
+    if(response.ok){
+      setLoading(false)
+      router.push("/")
+    }
+  }
   return (
     <div className="min-h-screen bg-[#f3f4f6] flex items-center justify-center p-6 font-sans text-[#0d2b45]">
       <div className="w-full max-w-[440px]">
@@ -31,6 +59,15 @@ const LoginPage = () => {
               <div className="relative">
                 <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-300" size={18} />
                 <input 
+                  onChange={(e)=>{
+                    dispatch({
+                    type:"INPUT_CHANGE",
+                    field:e.target.name,
+                    payload:e.target.value
+                    })
+                  }}
+                  name="email"
+                  value={state.email}
                   type="email" 
                   placeholder="name@gmail.com"
                   className="w-full pl-12 pr-4 py-4 bg-gray-50 border border-gray-100 rounded-2xl outline-none focus:border-[#13adc2] focus:ring-4 focus:ring-[#13adc2]/5 transition-all text-sm font-medium"
@@ -46,6 +83,15 @@ const LoginPage = () => {
               <div className="relative">
                 <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-300" size={18} />
                 <input 
+                  onChange={(e)=>{
+                    dispatch({
+                    type:"INPUT_CHANGE",
+                     field:e.target.name,
+                     payload:e.target.value
+                    })
+                  }}
+                  name="password"
+                  value={state.password}
                   type="password" 
                   placeholder="••••••••"
                   className="w-full pl-12 pr-4 py-4 bg-gray-50 border border-gray-100 rounded-2xl outline-none focus:border-[#13adc2] focus:ring-4 focus:ring-[#13adc2]/5 transition-all text-sm font-medium"

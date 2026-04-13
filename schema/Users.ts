@@ -1,12 +1,21 @@
 import mongoose from "mongoose"
 
 const UserSchema= mongoose.Schema({
-  name:String,
+  name:{
+    type:String,
+    required:true
+  },
   email:{
     type:String,
-    unique:true
+    unique:true,
+    required:true
   },
-  password:String
+  password:{
+    type:String,
+    required:true
+  }
 })
 
-export default const UserModel = mongoose.Model("Users",UserSchema)
+const UserModel = mongoose.model("HireOnceUsers",UserSchema)
+
+export default UserModel;
