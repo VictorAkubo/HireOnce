@@ -40,7 +40,7 @@ const SignupPage = () => {
      password:state.password
    })
    })
-   const data = response.json()
+   const data = await response.json()
    if(response.ok) {
      setLoading(false)
      router.push('/')

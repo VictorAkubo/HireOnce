@@ -1,6 +1,6 @@
 "use client";
 
-import React,{useReducer} from 'react';
+import React,{useReducer,useState} from 'react';
 import { useRouter} from "next/navigation"
 import Link from 'next/link';
 import {X, Mail, Lock, ArrowRight, Briefcase } from 'lucide-react';
@@ -25,6 +25,7 @@ const LoginPage = () => {
   })
   const Login = async (e)=>{
     e.preventDefault();
+    try{
     const response = await fetch("http://localhost:3000/api/login",{
       method:"POST",
       headers:{
@@ -32,9 +33,11 @@ const LoginPage = () => {
       },
       body:JSON.stringify(state)
     })
-    if(response.ok){
+    const data = await response.json()
       setLoading(false)
       router.push("/")
+    }catch(error){
+      setLoading(false)
     }
   }
   return (
@@ -114,7 +117,7 @@ const LoginPage = () => {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <button className="flex items-center justify-center gap-2 py-3 border border-gray-100 rounded-xl hover:bg-gray-50 transition-all text-xs font-bold"> <FaChrome size={16}/>Google</button>
-              <button className="flex items-center justify-center gap-2 py-3 border border-gray-100 rounded-xl hover:bg-gray-50 transition-all text-xs font-bold"><FaGithub size={16} />GitHub</button>
+              <button onClick={(e)=>Login(e)}className="flex items-center justify-center gap-2 py-3 border border-gray-100 rounded-xl hover:bg-gray-50 transition-all text-xs font-bold"><FaGithub size={16} />GitHub</button>
             </div>
           </div>
 
