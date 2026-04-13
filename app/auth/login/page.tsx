@@ -1,6 +1,7 @@
 "use client";
 
 import React,{useReducer} from 'react';
+import { useRouter} from "next/navigation"
 import Link from 'next/link';
 import {X, Mail, Lock, ArrowRight, Briefcase } from 'lucide-react';
 import {FaGithub,FaChrome} from "react-icons/fa"
@@ -16,6 +17,8 @@ const reducer =(state,action)=>{
   }
 }
 const LoginPage = () => {
+  const [loading,setLoading] = useState(false)
+  const router = useRouter()
   const [state,dispatch] = useReducer(reducer,{
     email:"",
     password:""
