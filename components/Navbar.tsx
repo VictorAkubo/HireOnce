@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation'; // Hook to check the current route
+import { usePathname } from 'next/navigation'; 
 import { Briefcase, Menu, X, ArrowRight } from 'lucide-react';
 
 const Navbar = () => {
