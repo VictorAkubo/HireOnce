@@ -1,7 +1,41 @@
 "use client"
 import { Send, Building2, Briefcase } from "lucide-react";
+import {useReducer} from "react"
 
+const reducer = (state, action)=>{
+  switch(action.type){
+    case "INPUT_CHANGE":
+      return {...state, [action.field]:action.payload};
+    default:
+      return state;
+  }
+}
 const CreateCompanyWithJob = () => {
+  const [state,dispatch] = useReducer(reducer,{
+    companyname:"",
+    industry:"",
+    location:"",
+    about:"",
+    adminComment:"",
+    logo:"",
+    comment:"",
+    name:"",
+    hiringStatus:true,
+    locationType:"",
+    salary:0,
+    salaryCurrency:"",
+    description:"",
+  })
+  
+  const SubmitCompany_Job = async()=>{
+    const response = await fetch(`${process.env.URL}/postcompany&job`,{
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json"
+      },
+      body:JSON.stringify(state)
+    })
+  }
   return (
     <div className="min-h-screen w-full px-4 py-10 bg-[#f8fafc]">
       <div className="max-w-5xl mx-auto">

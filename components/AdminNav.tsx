@@ -31,7 +31,7 @@ const AdminNav = () => {
     },
     {
       name: "Post Company",
-      route: "/postcompany",
+      route: "/post_company",
       icon: <Plus className="h-5 w-5 lg:h-8 lg:w-8" />
     },
     {
