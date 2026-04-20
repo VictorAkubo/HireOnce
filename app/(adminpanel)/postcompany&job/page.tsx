@@ -50,9 +50,19 @@ const CreateCompanyWithJob = () => {
             <h2 className="text-lg font-black uppercase tracking-widest text-[#13adc2] flex items-center gap-2">
               <Building2 size={20}/> Company Profile
             </h2>
-            <input type="text" placeholder="Company Name" className="w-full p-4 bg-slate-100 rounded-2xl outline-none focus:ring-2 focus:ring-[#13adc2] placeholder-slate-500 text-slate-800 font-medium" />
-            <input type="text" placeholder="Industry (e.g. Fintech)" className="w-full p-4 bg-slate-100 rounded-2xl outline-none focus:ring-2 focus:ring-[#13adc2] placeholder-slate-500 text-slate-800 font-medium" />
-            <input type="text" placeholder="Location (HQ)" className="w-full p-4 bg-slate-100 rounded-2xl outline-none focus:ring-2 focus:ring-[#13adc2] placeholder-slate-500 text-slate-800 font-medium" />
+            <input 
+            onChange={(e)=>dispatch({type:"INPUT_CHANGE",field:e.target.name,payload:e.target.value})}
+            name="companyname"
+            value={state.companyname}
+            type="text" placeholder="Company Name" className="w-full p-4 bg-slate-100 rounded-2xl outline-none focus:ring-2 focus:ring-[#13adc2] placeholder-slate-500 text-slate-800 font-medium" />
+            <input 
+            onChange={(e)=>dispatch({type:"INPUT_CHANGE",field:e.target.name,payload:e.target.value})}
+            name="industry"
+            value={state.industry}
+            type="text" placeholder="Industry (e.g. Fintech)" className="w-full p-4 bg-slate-100 rounded-2xl outline-none focus:ring-2 focus:ring-[#13adc2] placeholder-slate-500 text-slate-800 font-medium" />
+            <input 
+            
+            type="text" placeholder="Location (HQ)" className="w-full p-4 bg-slate-100 rounded-2xl outline-none focus:ring-2 focus:ring-[#13adc2] placeholder-slate-500 text-slate-800 font-medium" />
             <textarea placeholder="About Company..." rows="3" className="w-full p-4 bg-slate-100 rounded-2xl outline-none focus:ring-2 focus:ring-[#13adc2] placeholder-slate-500 text-slate-800 font-medium resize-none" />
             <textarea placeholder="Admin Comment..." rows="2" className="w-full p-4 bg-slate-100 rounded-2xl outline-none focus:ring-2 focus:ring-[#13adc2] placeholder-slate-500 text-slate-800 font-medium border-2 border-dashed border-slate-300" />
           </div>
