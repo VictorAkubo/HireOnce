@@ -41,7 +41,14 @@ const AddJobToCompany = () => {
               className="w-full p-5 bg-[#0d2b45] text-white rounded-2xl flex items-center justify-between cursor-pointer hover:bg-[#13adc2] transition-all shadow-lg"
             >
               <span className="font-bold">
-                {selectedCompany || "Select a company..."}
+                {<div className="flex gap-2 items-center">
+                  
+                  {/*logo for selected comoany*/}
+                  
+                   <img className="rounded-full h-10 w-10" src="/logo.jpg"/>
+                  {selectedCompany}
+                </div>
+                 || "Select a company..."}
               </span>
               <ChevronDown className={`transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`} />
             </div>
@@ -73,8 +80,10 @@ const AddJobToCompany = () => {
                           setIsOpen(false);
                           setSearchTerm("");
                         }}
-                        className="px-6 py-4 hover:bg-slate-50 cursor-pointer flex items-center justify-between group transition-colors"
+                        className="px-6 py-4 hover:bg-slate-50 cursor-pointer flex items-center  gap-2 group transition-colors"
                       >
+    {/*Company logo for better identification*/}
+                        <img className="rounded-full h-10 w-10" src="/logo.jpg"/>
                         <span className={`font-medium ${selectedCompany === company ? "text-[#13adc2] font-bold" : "text-slate-700"}`}>
                           {company}
                         </span>

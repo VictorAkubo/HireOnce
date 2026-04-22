@@ -1,5 +1,6 @@
 "use client";
-import React, { useState } from 'react';
+import React, {useEffect, useState } from 'react';
+import axios from "axios"
 import Link from 'next/link';
 import { 
   Search, 
@@ -14,7 +15,7 @@ import {
   TrendingUp
 } from 'lucide-react';
 
-const FEATURED_COMPANIES = [
+const FEATURED_COMPANIE = [
   {
     id: "techflow",
     name: "TechFlow Systems",
@@ -54,6 +55,24 @@ const FEATURED_COMPANIES = [
 ];
 
 const HomePage = () => {
+  const [FEATURED_COMPANIES,setFEATURED_COMPANIES]= useState([])
+  
+  useEffect(()=>{
+    try{
+    const fetchData = async ()=>{
+      const res = await axios.get(`${process.env.NEXT_PUBLIC_URL}/fetchcompany`)
+      if(res.status == 500) throw new Error("unable to fetch")
+      setFEATURED_COMPANIES(res.data)
+      
+    }
+    fetchData()
+    }catch(error){
+      alert("refresh page")
+    }
+  },[])
+  
+  
+  
   return (
     <div className="min-h-screen bg-[#f3f4f6] font-sans text-[#0d2b45] selection:bg-[#13adc2]/20">
       
