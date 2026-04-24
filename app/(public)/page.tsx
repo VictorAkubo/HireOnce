@@ -15,44 +15,7 @@ import {
   TrendingUp
 } from 'lucide-react';
 
-const FEATURED_COMPANIE = [
-  {
-    id: "techflow",
-    name: "TechFlow Systems",
-    industry: "Software Development",
-    location: "Remote / Lagos",
-    logoInitial: "TF",
-    jobs: [
-      { id: "j1", title: "Senior Frontend Engineer", type: "Full-time" },
-      { id: "j2", title: "Product Designer", type: "Contract" },
-      { id: "j3", title: "Node.js Developer", type: "Full-time" },
-      { id: "j4", title: "QA Analyst", type: "Full-time" }, // This one will be hidden on home
-    ]
-  },
-  {
-    id: "bluepeak",
-    name: "BluePeak Logistics",
-    industry: "Operations",
-    location: "Remote",
-    logoInitial: "BP",
-    jobs: [
-      { id: "j5", title: "Operations Manager", type: "Full-time" },
-      { id: "j6", title: "Customer Success", type: "Full-time" },
-      { id: "j7", title: "Admin Assistant", type: "Contract" },
-    ]
-  },
-  {
-    id: "finedge",
-    name: "FinEdge Partners",
-    industry: "Fintech",
-    location: "Hybrid / UK",
-    logoInitial: "FE",
-    jobs: [
-      { id: "j8", title: "Data Scientist", type: "Full-time" },
-      { id: "j9", title: "Compliance Officer", type: "Full-time" },
-    ]
-  }
-];
+
 
 const HomePage = () => {
   const [FEATURED_COMPANIES,setFEATURED_COMPANIES]= useState([])
@@ -61,9 +24,7 @@ const HomePage = () => {
     try{
     const fetchData = async ()=>{
       const res = await axios.get(`${process.env.NEXT_PUBLIC_URL}/fetchcompany`)
-      if(res.status == 500) throw new Error("unable to fetch")
-      setFEATURED_COMPANIES(res.data)
-      
+      setFEATURED_COMPANIES(res.data.data)
     }
     fetchData()
     }catch(error){
@@ -146,15 +107,15 @@ const HomePage = () => {
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {FEATURED_COMPANIES.map((company) => (
-              <div key={company.id} className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all flex flex-col">
+            {FEATURED_COMPANIES.length < 1 ? <div className="flex justify-self-center animate-spin h-6 w-6 bg-blue-200 mt-6"></div> : FEATURED_COMPANIES.slice(0,3).map((company) => (
+              <div key={company._id} className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all flex flex-col">
                 {/* Company Branding */}
                 <div className="flex items-center gap-4 mb-6">
                   <div className="w-14 h-14 bg-gray-50 rounded-xl border border-gray-100 flex items-center justify-center text-xl font-black text-gray-200 italic">
-                    {company.logoInitial}
+                    {company.companyname.slice(0,1)}
                   </div>
                   <div>
-                    <h4 className="font-bold text-lg leading-tight">{company.name}</h4>
+                    <h4 className="font-bold text-lg leading-tight">{company.companyname}</h4>
                     <p className="text-xs text-gray-400 font-medium flex items-center gap-1 mt-1">
                       <Building2 size={12} /> {company.industry}
                     </p>
@@ -163,16 +124,16 @@ const HomePage = () => {
 
                 {/* Nested Jobs (The Sneak Peek) */}
                 <div className="space-y-2 mb-8 flex-grow">
-                  <p className="text-[10px] uppercase font-bold text-gray-300 tracking-[0.15em] mb-3">Latest Roles</p>
+                  <p className="text-[10px] uppercase font-bold text-gray-300 tracking-[0.15em] mb-3">{company.jobs.length < 1 ? "No Roles yet" : "Latest Roles"}</p>
                   {company.jobs.slice(0, 3).map((job) => (
                     <Link 
-                      href={`/jobs/${job.id}`} 
-                      key={job.id}
+                      href={`/jobs/${job._id}`} 
+                      key={job._id}
                       className="flex items-center justify-between p-3 rounded-xl bg-gray-50/50 hover:bg-[#13adc2]/5 group transition-all"
                     >
                       <div>
-                        <p className="text-sm font-bold text-gray-700 group-hover:text-[#13adc2] transition-colors">{job.title}</p>
-                        <p className="text-[10px] text-gray-400 font-medium">{job.type}</p>
+                        <p className="text-sm font-bold text-gray-700 group-hover:text-[#13adc2] transition-colors">{job.name}</p>
+                        <p className="text-[10px] text-gray-400 font-medium">{job.locationType}</p>
                       </div>
                       <ArrowRight size={14} className="text-gray-300 group-hover:text-[#13adc2] -translate-x-2 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all" />
                     </Link>
@@ -181,7 +142,7 @@ const HomePage = () => {
 
                 {/* Footer Link */}
                 <Link 
-                  href={`/companies/${company.id}`}
+                  href={`/companies/${company._id}`}
                   className="w-full py-3 bg-gray-50 text-[#0d2b45] text-xs font-bold rounded-xl hover:bg-[#0d2b45] hover:text-white text-center transition-all"
                 >
                   View Full Profile
@@ -192,7 +153,7 @@ const HomePage = () => {
         </section>
 
         {/* --- PARTNER BANNER --- */}
-        <section className="max-w-7xl mx-auto px-6 py-20 pb-32">
+        <section className="max-w-7xl mx-auto px-6 py-1 pb-32">
           <div className="bg-[#0d2b45] rounded-3xl p-12 md:p-16 flex flex-col md:flex-row items-center gap-12 relative overflow-hidden">
             <div className="md:w-3/5 relative z-10 text-center md:text-left">
               <h2 className="text-4xl font-bold text-white mb-6 leading-tight">Hire with reliability.</h2>

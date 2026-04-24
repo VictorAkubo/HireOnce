@@ -31,6 +31,7 @@ import PostModel from "../../../schema/Post"
     logo,
     comment,
     jobs:[{
+    company:companyname,
     name,
     hiringStatus,
     locationType,

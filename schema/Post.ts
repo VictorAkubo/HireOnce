@@ -5,6 +5,7 @@ const PostSchema = mongoose.Schema({
     required: true
   },
   jobs:[{
+    company:String,
     name:String,
     hiringStatus:Boolean,
     locationType:String,
