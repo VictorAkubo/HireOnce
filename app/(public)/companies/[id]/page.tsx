@@ -49,7 +49,11 @@ const CompanyDetails = () => {
           {/* Profile Info */}
           <div className="px-8 pb-8 flex flex-col md:flex-row items-end gap-6 -mt-12 relative z-10">
             <div className="w-32 h-32 bg-white rounded-2xl border-4 border-white shadow-lg flex items-center justify-center text-4xl font-black text-gray-200 italic">
-              {FEATURED_COMPANY?.companyname.slice(0,2)}
+              {                   FEATURED_COMPANY?.logo == "" ? FEATURED_COMPANY?.companyname.slice(0,2) : (
+                     <img 
+                className="rounded-full h-18 w-18" 
+              src={FEATURED_COMPANY?.logo}/>
+                     )}
             </div>
             <div className="flex-grow pb-2">
               <div className="flex items-center gap-3 mb-1">

@@ -9,15 +9,16 @@ const CompaniesPage = () => {
   const locations = ["Remote", "Lagos, NG", "London, UK", "New York, US", "Nairobi, KE"];
   
   useEffect(()=>{
-    try{
+    
     const fetchData = async ()=>{
+      try{
       const res = await axios.get(`${process.env.NEXT_PUBLIC_URL}/fetchcompany`)
       setFEATURED_COMPANIES(res.data.data)
-    }
-    fetchData()
-    }catch(error){
+      }catch(error){
       alert("refresh page")
     }
+    }
+    fetchData()
   },[])
   
 
@@ -105,7 +106,9 @@ const CompaniesPage = () => {
                 <div key={index} className="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg hover:border-[#13adc2]/30 transition-all group">
                   <div className="flex justify-between items-start mb-4">
                     <div className="w-14 h-14 bg-gray-50 rounded-xl border border-gray-100 flex items-center justify-center text-xl font-black text-gray-300 italic group-hover:text-[#13adc2] transition-colors">
-                      {company.companyname.charAt(0)}
+                     {company.logo == "" ? company.companyname.charAt(0) : (
+                     <img className="rounded-full h-9 w-9" src={company.logo}/>
+                     )}
                     </div>
                     <span className="bg-green-100 text-green-700 text-[10px] font-bold px-2 py-1 rounded-md uppercase tracking-tighter">
                       Verified
@@ -117,13 +120,13 @@ const CompaniesPage = () => {
                   </h3>
                   <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-gray-500 mb-6">
                     <span className="flex items-center gap-1">📍 {company.location}</span>
-                    <span className="flex items-center gap-1">🏢 {company.ind}</span>
+                    <span className="flex items-center gap-1">🏢 {company.industry}</span>
                   </div>
 
                   <div className="flex items-center justify-between pt-4 border-t border-gray-50">
                     <span className="text-xs font-bold text-[#13adc2]">{company.jobs.length} Open Jobs</span>
                     <a 
-                      href={`/companies/${index}`}
+                      href={`/companies/${company._id}`}
                       className="px-4 py-2 bg-gray-50 text-[#0d2b45] text-xs font-bold rounded-lg hover:bg-[#0d2b45] hover:text-white transition-all"
                     >
                       View Profile
