@@ -56,8 +56,8 @@ const Navbar = () => {
       {/* --- MOBILE MENU --- */}
       {isOpen && (
         <div className="absolute top-16 left-0 w-full bg-white border-b border-gray-100 p-6 flex flex-col gap-6 md:hidden shadow-xl">
-          <Link href="/jobs" className="text-lg font-bold text-[#0d2b45]">Find Jobs</Link>
-          <Link href="/companies" className="text-lg font-bold text-[#0d2b45]">Partners</Link>
+          <Link onClick={()=>setIsOpen(false)}  href="/jobs" className="text-lg font-bold text-[#0d2b45]">Find Jobs</Link>
+          <Link onClick={()=>setIsOpen(false)}  href="/companies" className="text-lg font-bold text-[#0d2b45]">Partners</Link>
           <Link href="/auth/login" className="text-center font-bold text-gray-500">Sign In</Link>
           <Link href="/auth/register" className="bg-[#13adc2] text-white py-4 rounded-2xl text-center font-bold">Sign Up Free</Link>
         </div>

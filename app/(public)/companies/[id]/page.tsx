@@ -1,9 +1,28 @@
-import React from 'react';
+import React,{useState,useEffect} from 'react';
+import {useParams} from "next/navigation"
+import Link from 'next/link';
+import axios from "axios"
 
 const CompanyDetails = () => {
+  const param = useParams()
+  const {id} = param;
+  const [FEATURED_JOB,setFEATURED_JOB]= useState(null)
   const brandTeal = "#13adc2";
   const brandNavy = "#0d2b45";
-
+  
+  useEffect(()=>{
+    const fetchData = async ()=>{
+      try{
+      const res = await axios.get(`${process.env.NEXT_PUBLIC_URL}/fetchcompany`)
+      const fetchedData = res.data.data;
+      const JobData = fetchedData.flatMap(company=>company.jobs).find(job=>job._id == id)
+      setFEATURED_JOB(JobData)
+      }catch(error){
+      alert("refresh page")
+    }
+    }
+    fetchData()
+  },[])
   return (
     <div className="min-h-screen bg-[#f3f4f6] font-sans text-[#0d2b45]">
       {/* Navigation */}

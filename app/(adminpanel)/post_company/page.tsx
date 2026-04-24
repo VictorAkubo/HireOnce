@@ -41,7 +41,6 @@ const CreateCompanyOnly = () => {
       }
     );
     const data = await res.json();
-    const data = await res.json();
     setState({
       ...state,
       logo:data.secure_url

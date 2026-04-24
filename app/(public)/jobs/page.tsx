@@ -20,15 +20,17 @@ const JobsPage = () => {
   const {id} = param;
   const [CompanyJobs,setCompanyJobs] = useState([]);
   useEffect(()=>{
-    try{
+    
     const fetchData = async ()=>{
+      try{
       const res = await axios.get(`${process.env.NEXT_PUBLIC_URL}/fetchcompany`)
      setCompanyJobs(res.data.data.flatMap((company)=>company.jobs))
-    }
-    fetchData()
-    }catch(error){
+      }catch(error){
       alert("refresh page")
     }
+    }
+    fetchData()
+
   },[])
   return (
     <div className="min-h-screen bg-[#f3f4f6] font-sans text-[#0d2b45]">
@@ -95,7 +97,7 @@ const JobsPage = () => {
         <div className="lg:col-span-3 space-y-4">
           {CompanyJobs.map((job) => (
             <div 
-              key={job.id} 
+              key={job._id} 
               className={`bg-white border rounded-2xl p-6 shadow-sm hover:shadow-md transition-all group ${!job.hiringStatus ? 'opacity-60 grayscale-[0.5]' : 'border-gray-200'}`}
             >
               <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
@@ -139,7 +141,7 @@ const JobsPage = () => {
                    >
                      Apply Now
                    </button>
-                   <Link href={`/jobs/${job.id}`} className="text-xs font-bold text-[#13adc2] flex items-center gap-1 hover:underline">
+                   <Link href={`/jobs/${job._id}`} className="text-xs font-bold text-[#13adc2] flex items-center gap-1 hover:underline">
                      Details <ChevronRight size={14} />
                    </Link>
                 </div>

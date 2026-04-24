@@ -1,28 +1,29 @@
 "use client"
-import React, { useState } from 'react';
-
+import React, {useEffect, useState } from 'react';
+import axios from "axios"
 const CompaniesPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
+  const [FEATURED_COMPANIES,setFEATURED_COMPANIES]= useState([])
   
   const industries = ["All Industries", "Technology", "Healthcare", "Finance", "Logistics", "Marketing"];
   const locations = ["Remote", "Lagos, NG", "London, UK", "New York, US", "Nairobi, KE"];
+  
+  useEffect(()=>{
+    try{
+    const fetchData = async ()=>{
+      const res = await axios.get(`${process.env.NEXT_PUBLIC_URL}/fetchcompany`)
+      setFEATURED_COMPANIES(res.data.data)
+    }
+    fetchData()
+    }catch(error){
+      alert("refresh page")
+    }
+  },[])
+  
 
   return (
     <div className="min-h-screen bg-[#f3f4f6] font-sans text-[#0d2b45]">
       {/* Navigation Bar */}
-      <nav className="bg-white border-b border-gray-200 sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-          <a href="/" className="text-xl font-bold tracking-tight italic uppercase">
-            Hire<span className="text-[#13adc2]">Once</span>
-          </a>
-          <div className="hidden md:flex gap-8 text-sm font-semibold text-gray-500">
-            <a href="/jobs" className="hover:text-[#13adc2]">Jobs</a>
-            <a href="/companies" className="text-[#13adc2] border-b-2 border-[#13adc2] pb-5 mt-5">Companies</a>
-            <a href="/about" className="hover:text-[#13adc2]">About</a>
-          </div>
-          <button className="text-sm font-bold text-gray-600 hover:text-[#13adc2]">Sign In</button>
-        </div>
-      </nav>
 
       <main className="max-w-7xl mx-auto px-6 py-10">
         {/* Header Section */}
@@ -100,18 +101,11 @@ const CompaniesPage = () => {
 
             {/* Grid */}
             <div className="grid md:grid-cols-2 gap-6">
-              {[
-                { name: "TechFlow Systems", ind: "Technology", loc: "Remote", jobs: 12 },
-                { name: "BluePeak Logistics", ind: "Logistics", loc: "Lagos, NG", jobs: 4 },
-                { name: "GreenPoint Health", ind: "Healthcare", loc: "London, UK", jobs: 8 },
-                { name: "FinEdge Partners", ind: "Finance", loc: "New York, US", jobs: 21 },
-                { name: "SwiftSourcing", ind: "HR & Recruitment", loc: "Remote", jobs: 6 },
-                { name: "MetaEdge Media", ind: "Marketing", loc: "Remote", jobs: 15 },
-              ].map((company, index) => (
+              {FEATURED_COMPANIES.map((company, index) => (
                 <div key={index} className="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg hover:border-[#13adc2]/30 transition-all group">
                   <div className="flex justify-between items-start mb-4">
                     <div className="w-14 h-14 bg-gray-50 rounded-xl border border-gray-100 flex items-center justify-center text-xl font-black text-gray-300 italic group-hover:text-[#13adc2] transition-colors">
-                      {company.name.charAt(0)}
+                      {company.companyname.charAt(0)}
                     </div>
                     <span className="bg-green-100 text-green-700 text-[10px] font-bold px-2 py-1 rounded-md uppercase tracking-tighter">
                       Verified
@@ -119,15 +113,15 @@ const CompaniesPage = () => {
                   </div>
                   
                   <h3 className="text-lg font-bold group-hover:text-[#13adc2] transition-colors mb-1">
-                    {company.name}
+                    {company.companyname}
                   </h3>
                   <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-gray-500 mb-6">
-                    <span className="flex items-center gap-1">📍 {company.loc}</span>
+                    <span className="flex items-center gap-1">📍 {company.location}</span>
                     <span className="flex items-center gap-1">🏢 {company.ind}</span>
                   </div>
 
                   <div className="flex items-center justify-between pt-4 border-t border-gray-50">
-                    <span className="text-xs font-bold text-[#13adc2]">{company.jobs} Open Jobs</span>
+                    <span className="text-xs font-bold text-[#13adc2]">{company.jobs.length} Open Jobs</span>
                     <a 
                       href={`/companies/${index}`}
                       className="px-4 py-2 bg-gray-50 text-[#0d2b45] text-xs font-bold rounded-lg hover:bg-[#0d2b45] hover:text-white transition-all"
