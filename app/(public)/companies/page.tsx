@@ -1,26 +1,40 @@
 "use client"
 import React, {useEffect, useState } from 'react';
 import axios from "axios"
+import {ToggleRight,ToggleLeft} from "lucide-react"
 const CompaniesPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [FEATURED_COMPANIES,setFEATURED_COMPANIES]= useState([])
-  
+  const [FilteredSearch,setFilteredSearch] = useState([])
+  const [AdvanceSearch,setAdvanceSearch] = useState(false)
+  const [companyResponse,setCompanyResponse] = useState([])
   const industries = ["All Industries", "Technology", "Healthcare", "Finance", "Logistics", "Marketing"];
   const locations = ["Remote", "Lagos, NG", "London, UK", "New York, US", "Nairobi, KE"];
-  
   useEffect(()=>{
     
     const fetchData = async ()=>{
       try{
       const res = await axios.get(`${process.env.NEXT_PUBLIC_URL}/fetchcompany`)
+      
+      setCompanyResponse(res.data.data)
+      
+      /*console.log("first",companyResponse)*/
+      
       setFEATURED_COMPANIES(res.data.data)
+      console.log("second",companyResponse)
+
+      /*console.log("third",FilteredSearch)
+      console.log("fourth",FEATURED_COMPANIES)*/
       }catch(error){
       alert("refresh page")
     }
     }
     fetchData()
   },[])
-  
+  useEffect(()=>{
+      setFilteredSearch(companyResponse?.filter(company=>company.companyname.toLowerCase().includes(searchQuery.toLowerCase())))
+  },[searchQuery])
+      
 
   return (
     <div className="min-h-screen bg-[#f3f4f6] font-sans text-[#0d2b45]">
@@ -46,19 +60,28 @@ const CompaniesPage = () => {
                   <input 
                     type="text" 
                     placeholder="Search e.g. TechCorp"
+                    onChange={(e)=>setSearchQuery(e.target.value)}
                     className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm outline-none focus:border-[#13adc2] transition-all"
                   />
+                   <div onClick={()=>setAdvanceSearch(!AdvanceSearch)} className="mt-2 gap-2 flex items-center justify-self-end">
+                     <p>Advance Search</p>
+                  {AdvanceSearch ? <ToggleRight
+                  color="green"
+                  fill="green"
+                   /> : <ToggleLeft 
+                  />}
+                  </div>
                 </div>
 
                 {/* Industry Filter */}
+                {AdvanceSearch &&
+                <>
                 <div>
                   <label className="block text-xs font-bold mb-2 text-gray-600">Industry</label>
                   <select className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm outline-none focus:border-[#13adc2]">
                     {industries.map(ind => <option key={ind}>{ind}</option>)}
                   </select>
                 </div>
-
-                {/* Location Filter */}
                 <div>
                   <label className="block text-xs font-bold mb-2 text-gray-600">Location</label>
                   <div className="space-y-2 mt-2">
@@ -70,11 +93,13 @@ const CompaniesPage = () => {
                     ))}
                   </div>
                 </div>
+                </>
+                }
               </div>
-
-              <button className="w-full mt-8 py-2 bg-[#13adc2]/10 text-[#13adc2] font-bold rounded-lg text-sm hover:bg-[#13adc2] hover:text-white transition-all">
-                Clear All Filters
+                            {AdvanceSearch &&
+              <button className="w-full mt-8 py-2 bg-[#13adc2]/10 text-[#13adc2] font-bold rounded-lg text-sm hover:bg-[#13adc2] hover:text-white transition-all"> Clear All Filters
               </button>
+              }
             </div>
 
             {/* Promo Card */}
@@ -89,7 +114,7 @@ const CompaniesPage = () => {
           <div className="lg:w-3/4">
             {/* Sorting Header */}
             <div className="flex justify-between items-center mb-6 bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
-              <span className="text-sm font-medium text-gray-500">Showing <span className="text-[#0d2b45] font-bold">124</span> companies</span>
+              <span className="text-sm font-medium text-gray-500">Showing <span className="text-[#0d2b45] font-bold">{searchQuery ? FilteredSearch?.length : FEATURED_COMPANIES.length}</span> companies</span>
               <div className="flex items-center gap-2">
                 <span className="text-xs font-bold text-gray-400 uppercase">Sort by:</span>
                 <select className="text-sm font-semibold bg-transparent outline-none cursor-pointer">
@@ -101,8 +126,10 @@ const CompaniesPage = () => {
             </div>
 
             {/* Grid */}
-            <div className="grid md:grid-cols-2 gap-6">
-              {FEATURED_COMPANIES.map((company, index) => (
+            {(searchQuery ? FilteredSearch : FEATURED_COMPANIES)?.length < 1 ? (
+            <div className="flex justify-self-center animate-spin h-6 w-6 bg-blue-200 mt-13 mb-5"></div> 
+            ) : (   <div className="grid md:grid-cols-2 gap-6">
+              {(searchQuery ? FilteredSearch : FEATURED_COMPANIES)?.map((company, index) => (
                 <div key={index} className="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg hover:border-[#13adc2]/30 transition-all group">
                   <div className="flex justify-between items-start mb-4">
                     <div className="w-14 h-14 bg-gray-50 rounded-xl border border-gray-100 flex items-center justify-center text-xl font-black text-gray-300 italic group-hover:text-[#13adc2] transition-colors">
@@ -135,6 +162,7 @@ const CompaniesPage = () => {
                 </div>
               ))}
             </div>
+)}
 
             {/* Pagination */}
             <div className="mt-12 flex justify-center gap-2">

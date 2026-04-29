@@ -18,20 +18,32 @@ import {
 
 
 const HomePage = () => {
+  const [position,setPosition] = useState(false)
+  const [search,setSearch]= useState("")
   const [FEATURED_COMPANIES,setFEATURED_COMPANIES]= useState([])
+  const [FilteredSearch,setFilteredSearch] = useState([])
+  const [TotalJobs,setTotalJobs]= useState(0)
+  const [TotalPartners,setTotalPartners]= useState(0)
+  const [companyResponse,setCompanyResponse] = useState([])
   
   useEffect(()=>{
     try{
     const fetchData = async ()=>{
       const res = await axios.get(`${process.env.NEXT_PUBLIC_URL}/fetchcompany`)
       setFEATURED_COMPANIES(res.data.data)
+      setTotalJobs(res.data.data.flatMap(company=>company.jobs).length)
+      setTotalPartners(res.data.data.length)
+      setCompanyResponse(res.data.data)
+      
     }
     fetchData()
     }catch(error){
       alert("refresh page")
     }
   },[])
-  
+  useEffect(()=>{
+      setFilteredSearch(companyResponse?.filter(company=>company.companyname.toLowerCase().includes(search.toLowerCase())))
+  },[search])
   
   
   return (
@@ -54,11 +66,56 @@ const HomePage = () => {
             <div className="max-w-3xl mx-auto bg-white p-2 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.06)] border border-gray-100 flex flex-col md:flex-row gap-2 mb-8">
               <div className="flex-grow flex items-center px-4 gap-3 border-r border-gray-100">
                 <Search size={20} className="text-gray-400" strokeWidth={1.5} />
-                <input 
+                <div className={`${position && "absolute top-0 right-0 left-0 bg-gray-50 h-full w-full z-1000 flex flex-col p-4"}`}>
+                                  <input 
+                onChange={(e)=>{
+                  setSearch(e.target.value)
+                }}
+                onFocus={()=>{
+                  setPosition(true)
+                }}
                   type="text" 
                   placeholder="Job title or keywords..." 
-                  className="w-full py-4 outline-none text-gray-700 bg-transparent text-sm font-medium"
+                  className={`w-full py-4 outline-none text-gray-700 bg-transparent text-sm font-medium ${search && "border-gray-200"} `}
                 />
+                {Search && FilteredSearch.map((company,index)=>(
+                 <div className="grid md:grid-cols-2 gap-6">
+              {search && FilteredSearch.map((company, index) => (
+                <div key={index} className="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg hover:border-[#13adc2]/30 transition-all group">
+                  <div className="flex justify-between items-start mb-4">
+                    <div className="w-14 h-14 bg-gray-50 rounded-xl border border-gray-100 flex items-center justify-center text-xl font-black text-gray-300 italic group-hover:text-[#13adc2] transition-colors">
+                     {company.logo == "" ? company.companyname.charAt(0) : (
+                     <img className="rounded-full h-9 w-9" src={company.logo}/>
+                     )}
+                    </div>
+                    <span className="bg-green-100 text-green-700 text-[10px] font-bold px-2 py-1 rounded-md uppercase tracking-tighter">
+                      Verified
+                    </span>
+                  </div>
+                  
+                  <h3 className="text-lg font-bold group-hover:text-[#13adc2] transition-colors mb-1">
+                    {company.companyname}
+                  </h3>
+                  <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-gray-500 mb-6">
+                    <span className="flex items-center gap-1">📍 {company.location}</span>
+                    <span className="flex items-center gap-1">🏢 {company.industry}</span>
+                  </div>
+
+                  <div className="flex items-center justify-between pt-4 border-t border-gray-50">
+                    <span className="text-xs font-bold text-[#13adc2]">{company.jobs.length} Open Jobs</span>
+                    <a 
+                      href={`/companies/${company._id}`}
+                      className="px-4 py-2 bg-gray-50 text-[#0d2b45] text-xs font-bold rounded-lg hover:bg-[#0d2b45] hover:text-white transition-all"
+                    >
+                      View Profile
+                    </a>
+                  </div>
+                </div>
+              ))}
+            </div>
+                ))}
+                </div>
+              
               </div>
               <div className="flex items-center px-4 gap-3 md:w-48">
                 <MapPin size={20} className="text-gray-400" strokeWidth={1.5} />
@@ -80,9 +137,9 @@ const HomePage = () => {
         {/* --- STATS BAR --- */}
         <section className="max-w-6xl mx-auto -mt-10 grid grid-cols-1 md:grid-cols-3 gap-0 bg-white border border-gray-100 rounded-2xl shadow-xl overflow-hidden divide-y md:divide-y-0 md:divide-x divide-gray-50">
           {[
-            { label: "Jobs Posted", val: "10,000+", icon: <TrendingUp size={20} className="text-[#13adc2]" /> },
+            { label: "Jobs Posted", val: TotalJobs, icon: <TrendingUp size={20} className="text-[#13adc2]" /> },
             { label: "Active Clients", val: "2,000+", icon: <Users size={20} className="text-[#13adc2]" /> },
-            { label: "Verified Partners", val: "500+", icon: <ShieldCheck size={20} className="text-[#13adc2]" /> }
+            { label: "Verified Partners", val: TotalPartners, icon: <ShieldCheck size={20} className="text-[#13adc2]" /> }
           ].map((stat, i) => (
             <div key={i} className="p-8 text-center flex flex-col items-center gap-1">
               <div className="text-3xl font-black text-[#0d2b45] flex items-center gap-2">

@@ -26,17 +26,6 @@ const CompanyDetails = () => {
   },[])
   return (
     <div className="min-h-screen bg-[#f3f4f6] font-sans text-[#0d2b45]">
-      {/* Navigation */}
-      <nav className="bg-white border-b border-gray-200 sticky top-0 z-50">
-        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-          <a href="/" className="text-xl font-bold tracking-tight italic uppercase">
-            Hire<span className="text-[#13adc2]">Once</span>
-          </a>
-          <div className="flex gap-4">
-             <button className="text-sm font-bold text-gray-500 hover:text-[#13adc2]">Back to Directory</button>
-          </div>
-        </div>
-      </nav>
 
       <main className="max-w-6xl mx-auto px-6 py-8">
         {/* --- HEADER CARD --- */}

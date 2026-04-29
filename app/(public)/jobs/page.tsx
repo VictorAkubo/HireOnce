@@ -2,6 +2,7 @@
 import axios from "axios"
 import {useState,useEffect} from "react"
 import {useParams} from "next/navigation"
+import {ToggleRight,ToggleLeft} from "lucide-react"
 import Link from 'next/link';
 import { 
   Search, 
@@ -16,6 +17,7 @@ import {
 
 
 const JobsPage = () => {
+  const [AdvanceSearch,setAdvanceSearch] = useState(false)
   const param = useParams()
   const {id} = param;
   const [CompanyJobs,setCompanyJobs] = useState([]);
@@ -65,9 +67,17 @@ const JobsPage = () => {
                     placeholder="e.g. React" 
                     className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-100 rounded-xl text-sm outline-none focus:border-[#13adc2] transition-all"
                   />
+                                     <div onClick={()=>setAdvanceSearch(!AdvanceSearch)} className="mt-2 gap-2 flex items-center justify-self-end">
+                     <p>Advance Search</p>
+                  {AdvanceSearch ? <ToggleRight
+                  color="green"
+                  fill="green"
+                   /> : <ToggleLeft 
+                  />}
+                  </div>
                 </div>
               </div>
-
+{AdvanceSearch && <>
               {/* Location Type */}
               <div className="space-y-3">
                 <label className="text-xs font-bold">Location Type</label>
@@ -89,6 +99,7 @@ const JobsPage = () => {
                   <span>$200k+</span>
                 </div>
               </div>
+              </>}
             </div>
           </div>
         </aside>
